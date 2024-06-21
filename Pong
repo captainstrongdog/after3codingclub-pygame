@@ -18,8 +18,8 @@ NPC_x, NPC_y = 50, player_y
 ball_x, ball_y = WIDTH/2 , HEIGHT/2
 
 ball_size = 10 # 10 by 10
-ball_angle = random.randint(0,360)
-ball_speed = 5
+ball_angle = 45
+ball_speed = 2
 
 ball_eraser_x, ball_eraser_y = ball_x, ball_y
 
@@ -38,7 +38,7 @@ while True:
   player_rect = pygame.Rect(player_x,player_y, paddle_width, paddle_height)
   
   
-  NPC_rect = pygame.Rect(NPC_x, ball_y + paddle_height/2, paddle_width+10, paddle_height)
+  NPC_rect = pygame.Rect(NPC_x, ball_y-paddle_height/2 + paddle_height/2, paddle_width+10, paddle_height)
   
   pygame.draw.rect(screen, BLACK,(ball_x, ball_y, ball_size, ball_size))
   
@@ -52,17 +52,15 @@ while True:
           pygame.draw.rect(screen, BLACK, (player_rect))
           player_y += 30
   
-  ball_rect = pygame.Rect(ball_x, ball_y, ball_size, ball_size)
-  player_rect = pygame.Rect(player_x,player_y, paddle_width+10, paddle_height)
-  NPC_rect = pygame.Rect(NPC_x, NPC_y, paddle_width+10, paddle_height)
-  
   if ball_rect.colliderect(player_rect):
-    ball_x, ball_y = WIDTH/2 , HEIGHT/2
-    ball_angle = random.randint(0,360)
-    pygame.draw.rect(screen, BLACK, (ball_rect))
+    ball_angle = -ball_angle+360
   if ball_rect.colliderect(NPC_rect):
-    ball_x, ball_y = WIDTH/2 , HEIGHT/2
-    ball_angle = random.randint(0,360)
+    ball_angle = -ball_angle+360
+  if ball_y <= 0:
+    ball_angle = -ball_angle+540
+  if ball_y >= HEIGHT:
+    ball_angle = -ball_angle+540
+    
     
   if ball_eraser_x != ball_x:
     pygame.draw.rect(screen, BLACK,(ball_eraser_x-15, ball_y-15, 30,30))
@@ -71,10 +69,10 @@ while True:
     pygame.draw.rect(screen, BLACK,(ball_x-15, ball_eraser_y-15, 30, 30))
     ball_eraser_y = ball_y
 
-  ball_x += math.sin(ball_angle)*ball_speed
-  ball_y += math.cos(ball_angle)*ball_speed
+  ball_x += math.sin(ball_angle*math.pi/180)*ball_speed
+  ball_y += math.cos(ball_angle*math.pi/180)*ball_speed
   pygame.draw.rect(screen, GRAY,(ball_rect))    
-    
+  
   if ball_x == 0:
     ball_x, ball_y = WIDTH/2 , HEIGHT/2
   
