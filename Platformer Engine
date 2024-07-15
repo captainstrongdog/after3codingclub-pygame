@@ -20,12 +20,6 @@ font = pygame.font.Font(None, 36)
 player_size = 50
 player_x, player_y = HEIGHT/2, WIDTH/2
 player_eraser_x, player_eraser_y =  player_x, player_y#this sprite is in charge of erasing the player's trail
-  
-def jump():
-    global player_y, jumping, jump_time
-    if not jumping:
-        jumping = True
-        jump_time = 0
 
 # game loop
 running = True
