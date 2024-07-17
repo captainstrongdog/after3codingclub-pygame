@@ -11,26 +11,37 @@ FPS = 60
 
 
 # Initialize the screen
-WIDTH, HEIGHT = 800, 550#change the numbers to adjust the screen size
+WIDTH, HEIGHT = 800, 550 # Change the numbers to adjust the screen size
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption
 clock = pygame.time.Clock()
 
 player_size = 50
 player_x, player_y = HEIGHT/2, WIDTH/2
-player_eraser_x, player_eraser_y =  player_x, player_y#this sprite is in charge of erasing the player's trail
+player_drawer_x, player_drawer_y =  player_x, player_y # This sprite is in charge of drawing the player
 length = 3
 player_dir = 90
 player_speed = 2
 
-# game loop
+# Game loop
 running = True
 while running:
   
   player_rect = pygame.Rect(player_x,player_y, player_size, player_size)
-  player_eraser_rect = pygame.Rect(player_eraser_x, player_eraser_y, player_size, player_size)
+  player_drawer_rect = pygame.Rect(player_drawer_x, player_drawer_y, player_size, player_size)
   
-#movement
+        
+# Drawing the player
+  if player_drawer_y != player_y:
+    pygame.draw.rect(screen, BLACK, (player_drawer_rect))# This is to erase the trail
+    player_drawer_y = player_y
+    pygame.draw.rect(screen, RED, (player_rect))
+  if player_drawer_x != player_x:
+    pygame.draw.rect(screen, BLACK, (player_drawer_rect))
+    player_drawer_x = player_x
+    pygame.draw.rect(screen, RED, (player_rect))
+
+  # Player movement
   for event in pygame.event.get():
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_UP:
@@ -44,20 +55,11 @@ while running:
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_RIGHT:
         player_dir = 90
-        
-#drawing the player
-  if player_eraser_y != player_y:
-    pygame.draw.rect(screen, BLACK, (player_eraser_x, player_eraser_y, player_size, player_size))#this is to erase the trail
-    player_eraser_y = player_y
-    pygame.draw.rect(screen, RED, (player_eraser_x, player_eraser_y, player_size, player_size))
-  if player_eraser_x != player_x:
-    pygame.draw.rect(screen, BLACK, (player_eraser_x, player_eraser_y, player_size, player_size))
-    player_eraser_x = player_x
-    pygame.draw.rect(screen, RED, (player_eraser_x, player_eraser_y, player_size, player_size))
     
   player_x += math.sin(player_dir*math.pi/180)*player_speed
   player_y += math.cos(player_dir*math.pi/180)*player_speed  
-    
+
+  
 # Update the display
   pygame.display.flip()
 
