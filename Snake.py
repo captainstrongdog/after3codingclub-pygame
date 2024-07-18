@@ -9,7 +9,9 @@ RED = (255,0,0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 FPS = 60
+font = pygame.font.Font(None, 36)
 last_key = 0
+points = 0
 
 # Initialize the screen
 WIDTH, HEIGHT = 800, 550#change the numbers to adjust the screen size
@@ -85,6 +87,13 @@ while running:
   if player_rect.colliderect(apple_rect):
     apple_x, apple_y = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     pygame.draw.rect(screen, BLUE, (apple_rect))
+    pygame.draw.rect(screen, BLACK, (140, 10, 17.5, 30))
+    points += 1
+  
+# points system
+  pygame.display.set_caption("points:", str(points))
+  text = font.render(f"Points: {points}", True, WHITE)
+  screen.blit(text, (50, 10))
   
 # Update the display
   pygame.display.flip()
