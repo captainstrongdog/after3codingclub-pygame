@@ -4,14 +4,15 @@ import pygame, time, math, random
 pygame.init()
 
 #varibles
-FPS = 60 
+ 
 WIDTH , HEIGHT = 800 , 550
-font = pygame.font.Font(None, 36)
-
+FONT = pygame.font.Font(None, 36)
 GRAY = (105,105,105)
 BLACK = (0,0,0)
 RED = (255,0,0)
 BLUE = (0,0,255)
+FPS = 120
+
 collisions = 0
 
 paddle_width = 10
@@ -23,7 +24,7 @@ ball_x, ball_y = WIDTH/2 , HEIGHT/2
 
 ball_size = 10 # 10 by 10
 ball_angle = random.randint(80,100)
-ball_speed = 5
+ball_speed = 2.5
 ball_eraser_x, ball_eraser_y = ball_x, ball_y
 
 left_edge_x, left_edge_y = WIDTH-50, HEIGHT/2
