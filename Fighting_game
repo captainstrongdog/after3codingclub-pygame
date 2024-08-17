@@ -1,1 +1,24 @@
+import pygame, time, math, random
 
+pygame.init()
+ 
+WIDTH , HEIGHT = 800 , 550
+FONT = pygame.font.Font(None, 36)
+GRAY = (105,105,105)
+BLACK = (0,0,0)
+RED = (255,0,0)
+BLUE = (0,0,255)
+FPS = 60
+
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+clock = pygame.time.Clock()
+
+running = True
+while running:
+  
+  
+  
+    
+  pygame.display.flip()
+  clock.tick(FPS)
