@@ -1,66 +1,173 @@
-import pygame, sys, math, random, time
+import pygame
+import random
+import math
 
-# Initialize Pygame
+# Initialize pygame
 pygame.init()
 
-# Constants
-BLACK = (0,0,0)
-RED = (255,0,0)
+# Screen dimensions
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# Colors
+BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-FPS = 60 
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
 
+# Player class
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((50, 50))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = SCREEN_WIDTH // 2
+        self.rect.bottom = SCREEN_HEIGHT - 10
+        self.speed_x = 0
 
-# Initialize the screen
-WIDTH, HEIGHT = 800, 550#change the numbers to adjust the screen size
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption
-clock = pygame.time.Clock()
-font = pygame.font.Font(None, 36)
+    def update(self):
+        self.speed_x = 0
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.speed_x = -5
+        if keys[pygame.K_RIGHT]:
+            self.speed_x = 5
+        self.rect.x += self.speed_x
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.right = SCREEN_WIDTH
 
-player_size = 50
-player_x, player_y = HEIGHT/2, WIDTH/2
-player_eraser_x, player_eraser_y =  player_x, player_y#this sprite is in charge of erasing the player's trail
+    def shoot(self):
+        bullet = Bullet(self.rect.centerx, self.rect.top)
+        all_sprites.add(bullet)
+        bullets.add(bullet)
 
-# game loop
+# Enemy class
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((40, 40))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, SCREEN_WIDTH - self.rect.width)
+        self.rect.y = random.randint(-100, -40)
+        self.speed_y = random.randint(1, 5)
+        self.last_shot = pygame.time.get_ticks()
+        self.shoot_delay = random.randint(1000, 3000)  # Delay between enemy shots
+
+    def update(self):
+        self.rect.y += self.speed_y
+        if self.rect.top > SCREEN_HEIGHT:
+            self.rect.x = random.randint(0, SCREEN_WIDTH - self.rect.width)
+            self.rect.y = random.randint(-100, -40)
+            self.speed_y = random.randint(1, 5)
+
+        # Enemy shooting
+        now = pygame.time.get_ticks()
+        if now - self.last_shot > self.shoot_delay:
+            self.last_shot = now
+            self.shoot_bullets()
+
+    def shoot_bullets(self):
+        """Enemies shoot bullets in multiple directions."""
+        num_bullets = 8  # Number of bullets per wave
+        for i in range(num_bullets):
+            angle = i * (360 / num_bullets)
+            bullet = EnemyBullet(self.rect.centerx, self.rect.centery, angle)
+            all_sprites.add(bullet)
+            enemy_bullets.add(bullet)
+
+# Bullet class for the player
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((5, 10))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.bottom = y
+        self.speed_y = -10
+
+    def update(self):
+        self.rect.y += self.speed_y
+        if self.rect.bottom < 0:
+            self.kill()
+
+# Enemy bullet class (for bullet hell)
+class EnemyBullet(pygame.sprite.Sprite):
+    def __init__(self, x, y, angle):
+        super().__init__()
+        self.image = pygame.Surface((5, 5))
+        self.image.fill(YELLOW)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.speed = 3
+        # Convert angle to radians
+        self.angle_rad = math.radians(angle)
+        self.dx = math.cos(self.angle_rad) * self.speed
+        self.dy = math.sin(self.angle_rad) * self.speed
+
+    def update(self):
+        self.rect.x += self.dx
+        self.rect.y += self.dy
+        if self.rect.top > SCREEN_HEIGHT or self.rect.bottom < 0 or self.rect.left < 0 or self.rect.right > SCREEN_WIDTH:
+            self.kill()
+
+# Initialize the game
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Arcade Shooter with Bullet Hell")
+
+# Sprite groups
+all_sprites = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
+enemy_bullets = pygame.sprite.Group()
+
+# Create player
+player = Player()
+all_sprites.add(player)
+
+# Create enemies
+for i in range(8):
+    enemy = Enemy()
+    all_sprites.add(enemy)
+    enemies.add(enemy)
+
+# Game loop
 running = True
+clock = pygame.time.Clock()
+
 while running:
-  
-  player_rect = pygame.Rect(player_x,player_y, player_size, player_size)
-  player_eraser_rect = pygame.Rect(player_eraser_x, player_eraser_y, player_size, player_size)
-  
-#movement
-  for event in pygame.event.get():
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_UP:
-        player_y -= 10
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_DOWN:
-        player_y += 10
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_LEFT:
-        player_x -= 10
-    if event.type == pygame.KEYDOWN:
-      if event.key == pygame.K_RIGHT:
-        player_x += 10
-        
-#erase the players trail
-  if player_eraser_y != player_y:
-    pygame.draw.rect(screen, BLACK, (player_eraser_x, player_eraser_y, player_size, player_size))
-    player_eraser_y = player_y
-    pygame.draw.rect(screen, RED, (player_eraser_x, player_eraser_y, player_size, player_size))
-  if player_eraser_x != player_x:
-    pygame.draw.rect(screen, BLACK, (player_eraser_x, player_eraser_y, player_size, player_size))
-    player_eraser_x = player_x
-    pygame.draw.rect(screen, RED, (player_eraser_x, player_eraser_y, player_size, player_size))
+    clock.tick(60)
     
-  pygame.display.set_caption("points:")
-  text = font.render(f"press the arrow keys to start, use the arrow keys to move.", True, WHITE)
-  screen.blit(text, (10, 10))
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.shoot()
 
-    
-    
-# Update the display
-  pygame.display.flip()
+    # Update
+    all_sprites.update()
 
-# Cap the frame rate
-  clock.tick(FPS)
+    # Check for player bullet collisions with enemies
+    hits = pygame.sprite.groupcollide(enemies, bullets, True, True)
+    for hit in hits:
+        enemy = Enemy()
+        all_sprites.add(enemy)
+        enemies.add(enemy)
+
+    # Check for enemy bullet collisions with the player
+    if pygame.sprite.spritecollideany(player, enemy_bullets):
+        running = False  # End the game if the player is hit
+
+    # Draw
+    screen.fill(BLACK)
+    all_sprites.draw(screen)
+    pygame.display.flip()
+
+pygame.quit()
