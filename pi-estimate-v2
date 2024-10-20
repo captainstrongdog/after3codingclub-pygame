@@ -1,0 +1,13 @@
+import math
+x = 4
+radius = 1
+opposite = 0
+adjacent = 0
+area = 0
+max_size = 100
+while x <= max_size:
+    opposite = math.sin(math.pi/x)*radius
+    adjacent = math.cos(math.pi/x)*radius
+    area = opposite*adjacent*x
+    print(x, area)
+    x += 1
