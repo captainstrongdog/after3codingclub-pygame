@@ -71,7 +71,7 @@ class Obstacle(pygame.sprite.Sprite):
         self.timer = 0
 
     def update(self):
-        self.rect.x -= 10  # Speed of obstacles
+        self.rect.x -= 5  # Speed of obstacles
         if self.rect.x < -50:
             self.kill()  # Remove the obstacle if it's off-screen
         x = random.randint(0,1)
@@ -111,7 +111,7 @@ def game():
 
         # Spawn obstacles
         obstacle_timer += 1
-        if obstacle_timer > 30:  # Spawn an obstacle every 60 frames
+        if obstacle_timer > 40:  # Spawn an obstacle every 10 frames
             obstacle_timer = 0
             obstacle = Obstacle()
             all_sprites.add(obstacle)
@@ -141,3 +141,4 @@ def game():
 
 # Run the game
 game()
+
