@@ -68,16 +68,19 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH
         self.rect.y = GROUND_LEVEL
+        self.timer = 0
 
     def update(self):
         self.rect.x -= 10  # Speed of obstacles
         if self.rect.x < -50:
             self.kill()  # Remove the obstacle if it's off-screen
         x = random.randint(0,1)
-        if x == 0:
-          self.rect.y = GROUND_LEVEL
-        else:
-          self.rect.y = CEILING_LEVEL
+        self.timer += 1
+        if self.timer == 1:
+          if x == 0:
+            self.rect.y = GROUND_LEVEL
+          if x == 1:
+            self.rect.y = CEILING_LEVEL
 
 
 # Game loop
@@ -108,7 +111,7 @@ def game():
 
         # Spawn obstacles
         obstacle_timer += 1
-        if obstacle_timer > 60:  # Spawn an obstacle every 60 frames
+        if obstacle_timer > 30:  # Spawn an obstacle every 60 frames
             obstacle_timer = 0
             obstacle = Obstacle()
             all_sprites.add(obstacle)
