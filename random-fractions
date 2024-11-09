@@ -1,0 +1,12 @@
+import random
+num1 = 0
+num2 = 0
+denominator = 0
+for i in range(10):
+  denominator = random.randint(10, 100)
+  num1_top = random.randint(1, denominator)
+  num2_top = denominator-num1_top
+  num2_top = str(num2_top)
+  denominator = str(denominator)
+  num1_top = str(num1_top)
+  print(num1_top+"/"+denominator+", "+num2_top+"/"+denominator)
