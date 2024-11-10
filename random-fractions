@@ -1,12 +1,28 @@
-import random
-num1 = 0
-num2 = 0
+import random, math
 denominator = 0
-for i in range(10):
-  denominator = random.randint(10, 100)
-  num1_top = random.randint(1, denominator)
-  num2_top = denominator-num1_top
+for i in range(15):
+  num1_top = random.randint(10, 25)
+  num2_top = random.randint(10, 25)
+  num3_top = random.randint(10, 25)
+  num4_top = random.randint(10, 25)
+  denominator = (num1_top+num2_top+num3_top+num4_top)
+  num1_down = denominator/math.gcd(denominator, num1_top) 
+  num1_top = num1_top/math.gcd(denominator, num1_top)
+  num2_down = denominator/math.gcd(denominator, num2_top)
+  num2_top = num2_top/math.gcd(denominator, num2_top)
+  num3_down = denominator/math.gcd(denominator, num3_top) 
+  num3_top = num3_top/math.gcd(denominator, num3_top)
+  num4_down = denominator/math.gcd(denominator, num4_top)
+  num4_top = num4_top/math.gcd(denominator, num4_top)
+  
   num2_top = str(num2_top)
-  denominator = str(denominator)
   num1_top = str(num1_top)
-  print(num1_top+"/"+denominator+", "+num2_top+"/"+denominator)
+  num3_top = str(num3_top)
+  num4_top = str(num4_top)
+  num1_down = str(num1_down)
+  num2_down = str(num2_down)
+  num3_down = str(num3_down)
+  num4_down = str(num4_down)
+  denominator = str(denominator)
+  
+  print(num1_top+"/"+num1_down+", "+num2_top+"/"+num2_down+", "+num3_top+"/"+num3_down+", "+num4_top+"/"+num4_down)
