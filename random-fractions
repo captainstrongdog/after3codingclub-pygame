@@ -16,7 +16,7 @@ while x != 50:
   num4_down = denominator/math.gcd(denominator, num4_top)
   num4_top = num4_top/math.gcd(denominator, num4_top)
   
-  num2_top = str(int(num2_top))
+  num2_top = str(int(num2_top)) # The int() function gets rid of the ".0"
   num1_top = str(int(num1_top))
   num3_top = str(int(num3_top))
   num4_top = str(int(num4_top))
