@@ -1,6 +1,7 @@
 import random, math
 denominator = 0
-for i in range(15):
+x = 0
+while x != 50:
   num1_top = random.randint(10, 25)
   num2_top = random.randint(10, 25)
   num3_top = random.randint(10, 25)
@@ -15,14 +16,17 @@ for i in range(15):
   num4_down = denominator/math.gcd(denominator, num4_top)
   num4_top = num4_top/math.gcd(denominator, num4_top)
   
-  num2_top = str(num2_top)
-  num1_top = str(num1_top)
-  num3_top = str(num3_top)
-  num4_top = str(num4_top)
-  num1_down = str(num1_down)
-  num2_down = str(num2_down)
-  num3_down = str(num3_down)
-  num4_down = str(num4_down)
-  denominator = str(denominator)
+  num2_top = str(int(num2_top))
+  num1_top = str(int(num1_top))
+  num3_top = str(int(num3_top))
+  num4_top = str(int(num4_top))
+  num1_down = str(int(num1_down))
+  num2_down = str(int(num2_down))
+  num3_down = str(int(num3_down))
+  num4_down = str(int(num4_down))
+  denominator = str(int(denominator))
   
-  print(num1_top+"/"+num1_down+", "+num2_top+"/"+num2_down+", "+num3_top+"/"+num3_down+", "+num4_top+"/"+num4_down)
+  if num1_down != num2_down and num2_down != num3_down and num3_down != num4_down:
+	  print(num1_top+"/"+num1_down+", "+num2_top+"/"+num2_down+", "+num3_top+"/"+num3_down+", "+num4_top+"/"+num4_down)
+  
+  x += 1
